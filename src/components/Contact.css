@@ -1,0 +1,15 @@
+.name {
+  border: 1px solid black;
+  background-color: #66ccff;
+}
+
+input {
+  border: 3px solid #37ff;
+}
+
+h1 {
+  padding: 10px;
+  border: 2px solid #FFFf;
+  width: 165px;
+  background-color: #fff8;
+}
