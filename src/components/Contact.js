@@ -1,7 +1,8 @@
 import React from 'react';
 import ContactInfo from './ContactInfo';
 import ContactDetails from './ContactDetails';
-import './Contact.css';
+import update from 'react-addons-update';
+
 
 export default class Contact extends React.Component {
 
@@ -20,20 +21,53 @@ export default class Contact extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
+
+    this.handleCreate = this.handleCreate.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
+
   }
 
-  handleChange(e){
+  handleChange(e) {
     this.setState({
       keyword: e.target.value
     });
   }
 
-  handleClick(key){
+  handleClick(key) {
     this.setState({
       selectedkey: key
     });
 
+    console.log(key, 'is selected');
+  }
 
+  handleCreate(contact) {
+    this.setState({
+      contactData: update(this.state.contactData, { $push: [contact] })
+    });
+  }
+
+  handleRemove() {
+    this.setState({
+      contactData: update(this.state.contactData,
+          { $splice: [[this.state.selectedkey, 1]] }
+      ),
+      selectedkey: -1
+    });
+  }
+
+  handleEdit(name, phone) {
+    this.setState({
+      contactData: update(this.state.contactData,
+        {
+          [this.state.selectedkey]:{
+            name: { $set: name },
+            phome: { $set: phone }
+          }
+        }
+      )
+    });
   }
 
   render() {
@@ -41,31 +75,29 @@ export default class Contact extends React.Component {
       data.sort();
       data = data.filter(
         (contact) => {
-          return contact.name.toLowerCase()
-          .indexOf(this.state.keyword) > -1;
-        }
-      )
+          return contact.name.toLowerCase().indexOf(this.state.keyword) > -1;
+                }
+      );
       return data.map((contact, i) => {
         return (<ContactInfo
-                  contact={contact}
-                  key={i}
-                  onClick={() => this.handleClick(i)}/>);
+                    contact={contact}
+                    key={i}
+                    onClick={() => this.handleClick(i)}/>);
       });
-    };
-
+    }
     return (
       <div>
-        <h1>Contacts</h1>
-        <input
-          name="keyword"
-          placeholder="Search"
-          value={this.state.keyword}
-          onChange={this.handleChange}
-        />
-      <div className="name">{mapToComponents(this.state.contactData)}</div>
-        <ContactDetails
-            isSelected={this.state.selectedkey != -1}
-            contact={this.state.contactData[this.state.selectedkey]}/>
+          <h1>Contacts</h1>
+          <input
+            mame="keyword"
+            placeholder="Search"
+            value={this.state.keyword}
+            onChange={this.handleChange}
+            />
+          <div>{mapToComponents(this.state.contactData)}</div>
+          <ContactDetails isSelected={this.state.selectedkey != -1}
+                          contact={this.state.contactData[this.state.selectedkey]}/>
+
       </div>
     );
   }

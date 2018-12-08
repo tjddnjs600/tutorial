@@ -5,21 +5,23 @@ export default class ContactDetails extends React.Component {
   render() {
 
     const details = (
-      <div>
-        <p>{this.props.contact.name}</p>
-        <p>{this.props.contact.phone}</p>
-      </div>);
-    const blank = (<div>not selected</div>);
+        <div>
+          <p>{this.props.contact.name}</p>
+          <p>{this.props.contact.phone}</p>
+        </div>
+      );
+    const blank = (<div>Not Selected</div>);
+
     return (
       <div>
-        <h2>Details</h2>
-        {this.props.isSelected ? details : blank}
+          <h1>Details</h1>
+          {this.props.isSelected ? details : blank }
       </div>
     );
   }
 }
 
-ContactDetails.defaultProps = {
+ContactDetails.defaultProps ={
   contact: {
     name: '',
     phone: ''
